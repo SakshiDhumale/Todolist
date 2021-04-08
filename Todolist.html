@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+ <html>
+ <head>
+ <title> Your To Do List </title>
+ <meta charset="UTF-8">
+ <script src="https://kit.fontawesome.com/573743bf03.js" crossorigin="anonymous"></script>
+ <style>
+ .heading {
+	 height:150px;
+	 width:100%;
+	 position: fixed;
+	 top:0;
+	 right:0;
+	 background-color:#C0FFF3;
+ }
+ .add {
+     position: fixed;
+	 top:200px;
+	 right:75px;
+	 width:300px;
+	 height:300px;
+	 background-color: white;
+	 
+ }
+ .tsk_list{ 
+     padding-top:200px;
+     color:#C0FFF3;
+	 
+ }
+ .checked{
+      text-decoration : line-through;
+ }
+ .IMP{
+     text-decoration: underline;
+	 text-transform : uppercase;
+	 outline-style:double;
+	 outline-color:#C0FFF3;
+ }
+ .task{
+	 width: 500px;
+	 margin 10px;
+	 font-family: Lucida Sans;
+	 font-size:40px;
+ }
+ .list{
+	 display: flex;
+	 justify-content: space-between ;
+	 width: 500px;
+	 font-family: Lucida Sans;
+	 font-size:25px;
+     list-style: none;
+	 margin: 10px;
+
+ }
+ .editbtn {
+     background-color:#150039;
+     color: #C0FFF3;
+  }
+  .clpbtn{
+     background-color:#150039;
+     color: #C0FFF3;
+  }
+  .impbtn {
+     background-color:#150039;
+     color: #C0FFF3;
+  }
+  .dltbtn { 
+     background-color:#150039;
+     color: #C0FFF3;
+  }
+  .savebtn{
+     background-color:#150039;
+     color: #C0FFF3;
+  }
+ 
+ </style>
+ </head>
+ <body style="background-color:#150039;">
+     <div class="heading">
+         <h1 style="color:#150039; font-family:Lucida Sans; font-size:45px; padding:15px 50px "> Your To Do List</h1>
+     </div>
+	 <div class="add">
+	     <form autocomplete="off">
+		     <br><br>  
+	         <label style="color:#000000; font-family:Lucida Sans; font-size:40px; padding-top:10px; padding-left:10px;"> Task </label>
+             <br><br>
+		     <input type="text" id="add_task" style="padding-left:10px; padding-top:5px; padding-bottom:5px;  font-family:Lucida Sans; font-size:20px; margin: 10px;">
+		     <br><br>
+		     <button id="add" type="button"; style="background-color:#150039; font-family:Lucida Sans; font-size:20px; color: white; 
+		     margin: 10px;" onclick="addtolist()">ADD</button><br>
+		     
+	     </form>
+	 </div>
+	 <div class="tsk_list">
+	     <p style="font-family:Lucida Sans; font-size:40px; color:#C0FFF3; margin:10px;">Tasks To Be Done</p>
+	     <ul id="list" font-size:20px;></ul>
+	 </div>
+	 <script>
+	     var tasks=[];
+		 
+		 function addtolist(){
+		     var todo = document.getElementById("add_task").value;
+			 tasks.push(todo);
+			 var task = document.createElement("div");
+			 task.classList.add("todo");
+
+		     var listitem = document.createElement("li");// create an list item for the todo
+			 listitem.innerHTML = todo;
+			 listitem.classList.add("list");
+			 task.appendChild(listitem);
+	
+			 var editbtn= document.createElement("button");// create an edit button
+	    	 editbtn.innerHTML="edit";
+			 editbtn.classList.add("editbtn");
+			 listitem.appendChild(editbtn);
+				 
+			 var clpbtn= document.createElement("button");// create a button to mark a todo as completed
+			 clpbtn.innerHTML="done";
+			 clpbtn.classList.add("clpbtn");
+			 listitem.appendChild(clpbtn);
+				 
+			 var impbtn= document.createElement("button");// create a button to mark a todo as important
+			 impbtn.innerHTML="important";
+			 impbtn.classList.add("impbtn");
+			 listitem.appendChild(impbtn);
+				 
+			 var dltbtn= document.createElement("button");// create a button to delete a todo
+			 dltbtn.innerHTML="delete";
+			 dltbtn.classList.add("dltbtn");
+			 listitem.appendChild(dltbtn);
+				 
+			 list.appendChild(task);// append all the elements to the unordered list
+			 
+			 document.getElementById("add_task").value="";// clear out the input field
+		 }
+		 
+		 document.getElementById("list").addEventListener("click",modify);// event whenever a button is clicked
+		 
+		 function modify(event){
+		     const item = event.target;
+			  
+	         if(item.classList[0] === "editbtn"){
+			     const todo = item.parentElement;
+				 var index = tasks.indexOf(todo.innerHTML);
+				 todo.contentEditable = true;
+				 item.innerHTML ="save";
+				 item.classList.toggle("savebtn");
+				 item.classList.remove("editbtn");
+				 
+			     }
+		     else if(item.classList[0] === "savebtn"){
+			     const todo = item.parentElement;
+				 var index = tasks.indexOf(todo.innerHTML);
+				 todo.contentEditable = false;
+			     item.innerHTML ="edit";
+			     tasks[index-1] = todo.innerHTML;
+				 item.classList.toggle("editbtn");
+				 item.classList.remove("savebtn");
+				 }
+			  
+			 if(item.classList[0] === "dltbtn"){
+			     const todo = item.parentElement;
+				 var index = tasks.indexOf(todo.innerHTML);
+				 todo.remove();
+				 tasks.splice( index-1 ,1);
+				 }
+				 
+			 if(item.classList[0] === "clpbtn"){
+			     const todo = item.parentElement;
+				 var index = tasks.indexOf(todo.innerHTML);
+				 todo.classList.toggle("checked", true);
+				 console.log(todo);
+				 console.log(item);
+				 }
+				
+			 if(item.classList[0] === "impbtn"){
+			     const todo = item.parentElement;
+				 var index = tasks.indexOf(todo.innerHTML);
+				 todo.classList.toggle("IMP", true);
+				 }
+
+			 
+		 }
+	 </script>
+ </body>
+</html>
